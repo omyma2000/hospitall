@@ -1,0 +1,22 @@
+# Ignore Maven target
+/target/
+
+# Logs
+*.log
+
+# Compiled class files
+*.class
+
+# Packaged JARs
+*.jar
+
+# NetBeans private config
+/nbproject/private/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE folders
+.idea/
+.vscode/
