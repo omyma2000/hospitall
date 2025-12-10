@@ -4,9 +4,13 @@
  */
 package com.shbair.hospital.view;
 
+import com.shbair.hospital.db.dao.UserDetailsDao;
+import com.shbair.hospital.db.dao.UsersDao;
 import com.shbair.hospital.db.type.UsersType;
 import com.shbair.hospital.db.vo.UserDetailsVo;
 import com.shbair.hospital.db.vo.UsersVo;
+import com.shbair.hospital.validation.Validation;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -21,6 +25,7 @@ public class UsersView extends javax.swing.JFrame {
      */
     public UsersView() {
         initComponents();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -61,6 +66,7 @@ public class UsersView extends javax.swing.JFrame {
         jLabel4.setText("User Type");
 
         cUserType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "admin", "doctor", "nurse" }));
+        cUserType.setSelectedIndex(-1);
         cUserType.addActionListener(this::cUserTypeActionPerformed);
 
         jLabel5.setText("First name");
@@ -157,6 +163,19 @@ public class UsersView extends javax.swing.JFrame {
     }//GEN-LAST:event_txtMobileActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        boolean isTextEmpty = Validation.isEmpty(txtId.getText(),txtUserName.getText(),txtPassword.getText(),txtFirstName.getText(),txtFatherName.getText(),txtMobile.getText());
+        boolean  isEmpty    =  Validation.isEmpty(cUserType.getSelectedIndex());
+        boolean isDigit = Validation.isDigit(txtId.getText(),txtMobile.getText());
+        boolean isText = Validation.isText(txtUserName.getText(),txtPassword.getText(),txtFirstName.getText(),txtFatherName.getText());
+        
+        if(isTextEmpty==true||isEmpty==true){
+        JOptionPane.showMessageDialog(null, "please enter valid data!!");
+        return; // to exit from this method ^_*
+        } if(isDigit==false || isText==false){
+        JOptionPane.showMessageDialog(null, "please enter valid data!!");
+         return;
+        }
+        System.out.println("button clicked !"); // نتأكد من التنفيذ فقط 
         int id= Integer.valueOf(txtId.getText());
         String userName=txtUserName.getText();
         String password =txtPassword.getText();
@@ -175,12 +194,37 @@ public class UsersView extends javax.swing.JFrame {
         userDetailsVo.setFirstName(firstName);
         userDetailsVo.setFatherName(fatherName);
         userDetailsVo.setMobile(mobile);
+        try {
+           int usersCount =  UsersDao.getInstance().insert(usersVo);
+           int userDetailsCount = UserDetailsDao.getInstance().insert(userDetailsVo);
+          
+          if(usersCount == 1 && userDetailsCount == 1){
+           JOptionPane.showMessageDialog(null, "Insert successfully");
+           reset();
+           }else {
+            JOptionPane.showMessageDialog(null, "Insert is  not successfully");
+           }
+            
+        } catch (Exception ex) {
+           ex.printStackTrace();
+        }
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    protected void reset(){
+    txtId.setText("");
+    txtUserName.setText("");
+    txtPassword.setText("");
+    txtFirstName.setText("");
+    txtFatherName.setText("");
+    txtMobile.setText("");
+    cUserType.setSelectedIndex(-1);
+    
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

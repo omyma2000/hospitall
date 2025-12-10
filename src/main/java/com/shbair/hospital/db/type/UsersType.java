@@ -19,9 +19,9 @@ public enum UsersType {
       this.type=type;
     }
     // if enter 1 -> admin or 2 -> doctor 
-    public static UsersType getUsersTypeById(int id){
+    public static UsersType getUsersTypeByType(String  type){
     for(UsersType UsersType:UsersType.values()){
-         if (UsersType.getId()==id){
+         if (UsersType.getType()==type){
              return UsersType;
          }
         
