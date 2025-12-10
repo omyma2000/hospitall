@@ -9,7 +9,7 @@ package com.shbair.hospital.db.type;
  * @author LCS
  */
 public enum UsersType {
-    ADMIN(1, "admin"),DOCTOR(2,"doctor"); // Constants
+    ADMIN(1, "admin"),DOCTOR(2,"doctor"),NURSE(3,"nuese"); // Constants
     // متغيرات من نفس النوع  و من نفس الالعدد 
     private int id;
     private String type;

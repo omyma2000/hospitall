@@ -1,8 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.hospitalsystem;
+import com.shbair.hospital.view.Login;
+
 
 /**
  *
@@ -10,7 +8,11 @@ package com.mycompany.hospitalsystem;
  */
 public class HospitalSystem {
 
-    public static void main(String[] args) {
-        System.out.println("Hello World!");
-    }
+   public static void main(String[] args) {
+
+ 
+    Login login = new Login();
+    login.setVisible(true);
+  
+}
 }
