@@ -12,7 +12,9 @@ public class UsersVo {
     private int id ;
     private String userName;
     private String password;
-    private  UsersType usersType;
+    private UsersType usersType;
+    public String getPassword;
+    
 
     public int getId() {
         return id;

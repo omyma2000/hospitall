@@ -52,6 +52,7 @@ public class UsersView extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txtMobile = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,6 +81,9 @@ public class UsersView extends javax.swing.JFrame {
         jButton1.setText("Add");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(this::btnDeleteActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -105,7 +109,9 @@ public class UsersView extends javax.swing.JFrame {
                     .addComponent(txtFatherName)
                     .addComponent(txtMobile))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
                 .addGap(26, 26, 26))
         );
         layout.setVerticalGroup(
@@ -113,21 +119,24 @@ public class UsersView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(27, 27, 27)
+                                .addComponent(jButton1)))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jButton1)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel3)
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -195,10 +204,10 @@ public class UsersView extends javax.swing.JFrame {
         userDetailsVo.setFatherName(fatherName);
         userDetailsVo.setMobile(mobile);
         try {
-           int usersCount =  UsersDao.getInstance().insert(usersVo);
-           int userDetailsCount = UserDetailsDao.getInstance().insert(userDetailsVo);
+          // int usersCount =  UsersDao.getInstance().insert(usersVo);
+           int count = UserDetailsDao.getInstance().insert(userDetailsVo);
           
-          if(usersCount == 1 && userDetailsCount == 1){
+          if(count == 1 ){
            JOptionPane.showMessageDialog(null, "Insert successfully");
            reset();
            }else {
@@ -210,6 +219,41 @@ public class UsersView extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        boolean isTextEmpty = Validation.isEmpty(txtId.getText());
+        boolean isDigit = Validation.isDigit(txtId.getText());
+        if(isTextEmpty==true){
+        JOptionPane.showMessageDialog(null, "please enter valid data!!");
+        return; // to exit from this method ^_*
+        } if(isDigit==false ){
+        JOptionPane.showMessageDialog(null, "please enter valid data!!");
+         return;
+        }
+        int id= Integer.valueOf(txtId.getText());
+        UsersVo usersVo= new UsersVo();
+        usersVo.setId(id);
+        UserDetailsVo userDetailsVo = new UserDetailsVo();
+        userDetailsVo.setUsersVo(usersVo);
+         try {
+           UsersVo uv=   UsersDao.getInstance().getDataById(id);
+           if (uv==null){
+               JOptionPane.showMessageDialog(null, "please enter valid data!!");
+               return;
+           }
+           int count = UserDetailsDao.getInstance().delete(userDetailsVo);
+          
+          if(count == 1 ){
+           JOptionPane.showMessageDialog(null, "Delete successfully");
+           reset();
+           }else {
+            JOptionPane.showMessageDialog(null, "Delete is  not successfully");
+           }
+            
+        } catch (Exception ex) {
+           ex.printStackTrace();
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -248,6 +292,7 @@ public class UsersView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
     private javax.swing.JComboBox<String> cUserType;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

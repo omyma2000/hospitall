@@ -64,7 +64,6 @@ public class UsersDao extends Dao implements DaoList<UsersVo> {
     @Override
     
 public UsersVo getData(UsersVo uv) throws Exception {
-    System.out.println("Trying login with: " + uv.getUserName() + " / " + uv.getPassword());
     Connection con = null;
     UsersVo usersVo = null;
     ResultSet rs = null;
@@ -72,18 +71,54 @@ public UsersVo getData(UsersVo uv) throws Exception {
     try {
         con = getConnection();
 
-        String sql = "SELECT * FROM users WHERE USER_NAME = ? AND PASSWORD = ?";
-        PreparedStatement ps = con.prepareStatement(sql);
-        ps.setString(1, uv.getUserName());
-        ps.setString(2, uv.getPassword());
-
+        String sql = "SELECT * FROM users WHERE USER_NAME = "+ uv.getUserName() +"AND PASSWORD = "+uv.getPassword();
+        PreparedStatement ps = con.prepareCall(sql);
         rs = ps.executeQuery();
 
-        if (rs.next()) {
-            usersVo = new UsersVo();
-            usersVo.setId(rs.getInt("id"));
-            usersVo.setUserName(rs.getString("USER_NAME"));
-            usersVo.setPassword(rs.getString("PASSWORD"));
+        while (rs.next()){
+        usersVo = new UsersVo();
+        usersVo.setId(rs.getInt("id"));
+        usersVo.setUserName("USER_NAMEA");
+        usersVo.setPassword("PASSWORD");
+        UsersType usersType = UsersType.getUsersTypeByTypeById(rs.getInt("USERS_TYPE"));
+        usersVo.setUsersType(usersType);
+        }
+
+        rs.close();
+        ps.close();
+        
+    } catch(Exception ex) {
+        ex.printStackTrace(); //  باش نعرف لو خطا
+    } finally {
+        closeConnection(con);
+    }
+
+    return usersVo;
+}
+
+
+
+    @Override
+  
+    public UsersVo getDataById(int id) throws Exception {
+    Connection con = null;
+    UsersVo usersVo = null;
+    ResultSet rs = null;
+
+    try {
+        con = getConnection();
+        String sql = "SELECT * FROM users WHERE ID=?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+        rs = ps.executeQuery();
+
+         while (rs.next()){
+        usersVo = new UsersVo();
+        usersVo.setId(rs.getInt("id"));
+        usersVo.setUserName("USER_NAMEA");
+        usersVo.setPassword("PASSWORD");
+        UsersType usersType = UsersType.getUsersTypeByTypeById(rs.getInt("USERS_TYPE"));
+        usersVo.setUsersType(usersType);
         }
 
         rs.close();
@@ -107,7 +142,8 @@ public UsersVo getData(UsersVo uv) throws Exception {
     } catch (Exception e) {
         e.printStackTrace();
     }
-}
+           
+    }
 
 }
 

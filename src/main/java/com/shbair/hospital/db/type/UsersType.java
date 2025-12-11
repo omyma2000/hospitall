@@ -1,52 +1,39 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.shbair.hospital.db.type;
 
-/**
- *
- * @author LCS
- */
 public enum UsersType {
-    ADMIN(1, "admin"),DOCTOR(2,"doctor"),NURSE(3,"nuese"); // Constants
-    // متغيرات من نفس النوع  و من نفس الالعدد 
+    ADMIN(1, "admin"),
+    DOCTOR(2, "doctor"),
+    NURSE(3, "nurse");   // مفيش getId هنا
+
+    public static UsersType getUsersTypeByTypeById(int aInt) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
     private int id;
     private String type;
-    // constructor
-    private UsersType(int id , String type){
-      this.id=id;
-      this.type=type;
-    }
-    // if enter 1 -> admin or 2 -> doctor 
-    public static UsersType getUsersTypeByType(String  type){
-    for(UsersType UsersType:UsersType.values()){
-         if (UsersType.getType()==type){
-             return UsersType;
-         }
-        
-    }
-     return null;
-    }
-    
-    
-    // encapsulation (setter , getter)
 
+    // constructor
+    private UsersType(int id, String type) {
+        this.id = id;
+        this.type = type;
+    }
+
+    // if enter "admin" -> ADMIN, "doctor" -> DOCTOR
+    public static UsersType getUsersTypeByType(String type) {
+        for (UsersType u : UsersType.values()) {
+            if (u.getType().equals(type)) {   // صح
+                return u;
+            }
+        }
+        return null;
+    }
+
+    // getters
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getType() {
         return type;
     }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-    
-    
 }

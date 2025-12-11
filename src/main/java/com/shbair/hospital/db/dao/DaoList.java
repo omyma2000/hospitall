@@ -19,4 +19,5 @@ public interface DaoList<T>  // generic
     public int update(T t)throws Exception;
     public int delete(T t)throws Exception;
     public T getData(T t)throws Exception;
+    public T getDataById(int id)throws Exception;
 }
