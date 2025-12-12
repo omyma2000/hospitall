@@ -9,7 +9,7 @@ package com.shbair.hospital.validation;
  * @author LCS
  */
 public class Validation {
-    public static boolean isEmpty(String... text)//infinite paramerter numbers....
+    public static boolean isEmpty(String... text)//infinite numbers of paramerters ....
     {
     for(String s:text){
     if (s.isEmpty()){

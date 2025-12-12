@@ -10,6 +10,10 @@ import com.shbair.hospital.db.type.UsersType;
 import com.shbair.hospital.db.vo.UserDetailsVo;
 import com.shbair.hospital.db.vo.UsersVo;
 import com.shbair.hospital.validation.Validation;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,7 +21,7 @@ import javax.swing.JOptionPane;
  * @author LCS
  */
 public class UsersView extends javax.swing.JFrame {
-    
+    public static  byte []imageByte;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UsersView.class.getName());
 
     /**
@@ -37,9 +41,10 @@ public class UsersView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel8 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         txtUserName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JTextField();
@@ -53,16 +58,26 @@ public class UsersView extends javax.swing.JFrame {
         txtMobile = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        btnEdite = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        txtImagePath = new javax.swing.JTextField();
+
+        jLabel8.setText("Add");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-        jLabel1.setText("ID");
-
-        jLabel2.setText("User name");
+        jLabel1.setText("     ID ");
 
         txtId.addActionListener(this::txtIdActionPerformed);
 
+        jLabel2.setText("User Name");
+
+        txtUserName.addActionListener(this::txtUserNameActionPerformed);
+
         jLabel3.setText("Password");
+
+        txtPassword.addActionListener(this::txtPasswordActionPerformed);
 
         jLabel4.setText("User Type");
 
@@ -70,19 +85,23 @@ public class UsersView extends javax.swing.JFrame {
         cUserType.setSelectedIndex(-1);
         cUserType.addActionListener(this::cUserTypeActionPerformed);
 
-        jLabel5.setText("First name");
+        jLabel5.setText("First Name");
 
-        jLabel6.setText("Father name");
+        jLabel6.setText("Father Name");
 
         jLabel7.setText("Mobile");
-
-        txtMobile.addActionListener(this::txtMobileActionPerformed);
 
         jButton1.setText("Add");
         jButton1.addActionListener(this::jButton1ActionPerformed);
 
         btnDelete.setText("Delete");
         btnDelete.addActionListener(this::btnDeleteActionPerformed);
+
+        btnEdite.setText("Edit");
+        btnEdite.addActionListener(this::btnEditeActionPerformed);
+
+        jButton2.setText("Choose Image ");
+        jButton2.addActionListener(this::jButton2ActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,58 +112,57 @@ public class UsersView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(txtUserName, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cUserType, javax.swing.GroupLayout.Alignment.LEADING, 0, 148, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtId)
+                    .addComponent(txtUserName)
+                    .addComponent(txtPassword)
+                    .addComponent(cUserType, 0, 172, Short.MAX_VALUE)
                     .addComponent(txtFirstName)
                     .addComponent(txtFatherName)
                     .addComponent(txtMobile))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
-                .addGap(26, 26, 26))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnEdite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                    .addComponent(txtImagePath))
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel1)
-                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel2)
-                                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(27, 27, 27)
-                                .addComponent(jButton1)))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnDelete, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txtUserName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelete))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEdite))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(cUserType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cUserType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
-                    .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtImagePath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -153,7 +171,7 @@ public class UsersView extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
                     .addComponent(txtMobile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -163,34 +181,33 @@ public class UsersView extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdActionPerformed
 
-    private void cUserTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cUserTypeActionPerformed
+    private void txtUserNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserNameActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cUserTypeActionPerformed
+    }//GEN-LAST:event_txtUserNameActionPerformed
 
-    private void txtMobileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMobileActionPerformed
+    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtMobileActionPerformed
+    }//GEN-LAST:event_txtPasswordActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        boolean isTextEmpty = Validation.isEmpty(txtId.getText(),txtUserName.getText(),txtPassword.getText(),txtFirstName.getText(),txtFatherName.getText(),txtMobile.getText());
-        boolean  isEmpty    =  Validation.isEmpty(cUserType.getSelectedIndex());
-        boolean isDigit = Validation.isDigit(txtId.getText(),txtMobile.getText());
-        boolean isText = Validation.isText(txtUserName.getText(),txtPassword.getText(),txtFirstName.getText(),txtFatherName.getText());
+        boolean isTextEmpty = Validation .isEmpty(txtId.getText(),txtUserName.getText(),txtPassword.getText(),txtFirstName.getText(),txtFatherName.getText(),txtMobile.getText());
+        boolean isEmpty =  Validation.isEmpty(cUserType.getSelectedIndex());
+        boolean isDigit=Validation.isDigit(txtId.getText(),txtMobile.getText());
+        boolean  isText= Validation.isText(txtUserName.getText(),txtPassword.getText(),txtFirstName.getText(),txtFatherName.getText());
         
-        if(isTextEmpty==true||isEmpty==true){
-        JOptionPane.showMessageDialog(null, "please enter valid data!!");
-        return; // to exit from this method ^_*
-        } if(isDigit==false || isText==false){
-        JOptionPane.showMessageDialog(null, "please enter valid data!!");
-         return;
+        if (isTextEmpty==true || isEmpty==true) {
+            JOptionPane.showMessageDialog(null,"please enter valid data!!! ");
+            return;
+        }if (isDigit==false||isText==false) {
+            JOptionPane.showMessageDialog(null,"please enter valid data!!! ");
+          return;
         }
-        System.out.println("button clicked !"); // نتأكد من التنفيذ فقط 
-        int id= Integer.valueOf(txtId.getText());
-        String userName=txtUserName.getText();
-        String password =txtPassword.getText();
-        UsersType usersType;
-        usersType = UsersType.getUsersTypeByType(cUserType.getSelectedItem().toString()); // (start from index 1) 1 ->admin 2 -> doctor ....etc
-        UsersVo usersVo= new UsersVo();
+        int id =Integer.valueOf( txtId.getText());
+        String userName = txtUserName.getText();
+        String password = txtPassword.getText();
+        UsersType usersType = UsersType.getUsersTypeByType(cUserType.getSelectedItem().toString());
+        // تعبئة الداتا 
+        UsersVo usersVo =new UsersVo();
         usersVo.setId(id);
         usersVo.setUserName(userName);
         usersVo.setPassword(password);
@@ -198,62 +215,139 @@ public class UsersView extends javax.swing.JFrame {
         String firstName = txtFirstName.getText();
         String fatherName = txtFatherName.getText();
         String mobile = txtMobile.getText();
+        // تعبئة الداتا 
         UserDetailsVo userDetailsVo = new UserDetailsVo();
         userDetailsVo.setUsersVo(usersVo);
         userDetailsVo.setFirstName(firstName);
         userDetailsVo.setFatherName(fatherName);
         userDetailsVo.setMobile(mobile);
         try {
-          // int usersCount =  UsersDao.getInstance().insert(usersVo);
-           int count = UserDetailsDao.getInstance().insert(userDetailsVo);
-          
-          if(count == 1 ){
-           JOptionPane.showMessageDialog(null, "Insert successfully");
-           reset();
-           }else {
-            JOptionPane.showMessageDialog(null, "Insert is  not successfully");
-           }
+         // int userscount=  UsersDao.getInstance().insert(usersVo);
+          int count= UserDetailsDao.getInstance().insert(userDetailsVo);
+            if (count==1)
+            {
+                JOptionPane.showMessageDialog(null,"Insert successfully *_^ ");
+                reset();
+            }else{
+              JOptionPane.showMessageDialog(null,"Insert is not successfully !!! ");
             
-        } catch (Exception ex) {
-           ex.printStackTrace();
+            }
+                    } catch (Exception ex) {
+            System.getLogger(UsersView.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void cUserTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cUserTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cUserTypeActionPerformed
+
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        boolean isTextEmpty = Validation.isEmpty(txtId.getText());
-        boolean isDigit = Validation.isDigit(txtId.getText());
-        if(isTextEmpty==true){
-        JOptionPane.showMessageDialog(null, "please enter valid data!!");
-        return; // to exit from this method ^_*
-        } if(isDigit==false ){
-        JOptionPane.showMessageDialog(null, "please enter valid data!!");
-         return;
+                                         
+    try {
+        // نقرأ الـ ID اللي دخله المستخدم
+        int id = Integer.parseInt(txtId.getText().trim());
+
+        // ننشئ كائن UserDetailsVo مع ID المستخدم
+        UsersVo uv = new UsersVo();
+        uv.setId(id);
+
+        UserDetailsVo ud = new UserDetailsVo();
+        ud.setUsersVo(uv);
+
+        // نطلب من DAO الحذف
+        int result = UserDetailsDao.getInstance().delete(ud);
+        
+        if (result == 1) {
+            JOptionPane.showMessageDialog(this, "Deleted");
+        } else {
+            JOptionPane.showMessageDialog(this, " ID Not found ");
         }
-        int id= Integer.valueOf(txtId.getText());
-        UsersVo usersVo= new UsersVo();
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, " Enter Valid ID");
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "An error occurred during deletion:" + e.getMessage());
+        e.printStackTrace();
+    }
+
+
+
+
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnEditeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditeActionPerformed
+        boolean isTextEmpty = Validation .isEmpty(txtId.getText(),txtUserName.getText(),txtPassword.getText(),txtFirstName.getText(),txtFatherName.getText(),txtMobile.getText());
+        boolean isEmpty =  Validation.isEmpty(cUserType.getSelectedIndex());
+        boolean isDigit=Validation.isDigit(txtId.getText(),txtMobile.getText());
+        boolean  isText= Validation.isText(txtUserName.getText(),txtPassword.getText(),txtFirstName.getText(),txtFatherName.getText());
+        if (isTextEmpty==true || isEmpty==true) {
+            JOptionPane.showMessageDialog(null,"please enter valid data!!! ");
+            return;
+        }if (isDigit==false||isText==false) {
+            JOptionPane.showMessageDialog(null,"please enter valid data!!! ");
+          return;
+        }
+      
+        int id =Integer.valueOf( txtId.getText());
+        String userName = txtUserName.getText();
+        String password = txtPassword.getText();
+        UsersType usersType = UsersType.getUsersTypeByType(cUserType.getSelectedItem().toString());
+        // تعبئة الداتا 
+        UsersVo usersVo =new UsersVo();
         usersVo.setId(id);
+        usersVo.setUserName(userName);
+        usersVo.setPassword(password);
+        usersVo.setUsersType(usersType);
+        String firstName = txtFirstName.getText();
+        String fatherName = txtFatherName.getText();
+        String mobile = txtMobile.getText();
+        // تعبئة الداتا 
         UserDetailsVo userDetailsVo = new UserDetailsVo();
         userDetailsVo.setUsersVo(usersVo);
-         try {
-           UsersVo uv=   UsersDao.getInstance().getDataById(id);
-           if (uv==null){
-               JOptionPane.showMessageDialog(null, "please enter valid data!!");
-               return;
-           }
-           int count = UserDetailsDao.getInstance().delete(userDetailsVo);
+        userDetailsVo.setFirstName(firstName);
+        userDetailsVo.setFatherName(fatherName);
+        userDetailsVo.setMobile(mobile);
+        
+        
+        try {
+          int count= UserDetailsDao.getInstance().update(userDetailsVo);
           
-          if(count == 1 ){
-           JOptionPane.showMessageDialog(null, "Delete successfully");
-           reset();
-           }else {
-            JOptionPane.showMessageDialog(null, "Delete is  not successfully");
-           }
+            if (count==1)
+            {
+                JOptionPane.showMessageDialog(null,"Update successfully *_^ ");
+                reset();
+            }else{
+              JOptionPane.showMessageDialog(null,"Update is not successfully !!! ");
             
-        } catch (Exception ex) {
-           ex.printStackTrace();
-        }
-    }//GEN-LAST:event_btnDeleteActionPerformed
+            }
+                    } catch (Exception ex) {
+            System.getLogger(UsersView.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } 
+        
+    }//GEN-LAST:event_btnEditeActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       JFileChooser jFilwChooser = new JFileChooser();
+       jFilwChooser.showOpenDialog(null);
+       File file = jFilwChooser.getSelectedFile();
+       String ImagePath=file.getAbsolutePath();
+       txtImagePath.setText(ImagePath);
+       try{
+       File file2= new  File(ImagePath);
+       FileInputStream fis = new FileInputStream(file2);
+       ByteArrayOutputStream baos= new ByteArrayOutputStream();
+       byte []lengtht = new byte[1024];
+       for(int i; (i=fis.read(lengtht))!=-1;){
+       baos.write(lengtht, 0, i);
+       
+       }
+       imageByte =baos.toByteArray();
+       
+       }catch(Exception ex ){
+       }
+       
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -266,9 +360,7 @@ public class UsersView extends javax.swing.JFrame {
     txtFatherName.setText("");
     txtMobile.setText("");
     cUserType.setSelectedIndex(-1);
-    
     }
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -293,8 +385,10 @@ public class UsersView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdite;
     private javax.swing.JComboBox<String> cUserType;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -302,9 +396,11 @@ public class UsersView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JTextField txtFatherName;
     private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtImagePath;
     private javax.swing.JTextField txtMobile;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtUserName;

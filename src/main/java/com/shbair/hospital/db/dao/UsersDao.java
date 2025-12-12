@@ -29,28 +29,41 @@ public class UsersDao extends Dao implements DaoList<UsersVo> {
     }
 
     @Override
-    public int insert(UsersVo uv) throws Exception { 
-        Connection con = null;
-        int count = 0;
-        try{
-            con= getConnection();
-            String sql ="INSERT INTO users (USER_NAME,PASSWORD,USER_TYPE,ID) VALUES (?,?,?,?)";
-            PreparedStatement ps ;
-            ps = con.prepareStatement(sql);
-            ps.setString(1, uv.getUserName());
-            ps.setString(2, uv.getPassword());
-            ps.setInt(3,uv.getUsersType().getId());
-             ps.setInt(4, uv.getId());
-            count= ps.executeUpdate();
-            ps.close();
-        }catch(Exception ex ){
+    public int insert(UsersVo uv) throws Exception {
+    Connection con = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+
+    try {
+        con = getConnection();
+
+        // بدون ID لأن الجدول Auto Increment
+        String sql = "INSERT INTO users (USER_NAME, PASSWORD, USER_TYPE) VALUES (?, ?, ?)";
         
-        }finally{
-            closeConnection(con);
-        
+        ps = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+        ps.setString(1, uv.getUserName());
+        ps.setString(2, uv.getPassword());
+        ps.setInt(3, uv.getUsersType().getId());
+
+        int count = ps.executeUpdate();
+
+        // سحب آخر ID تمت إضافته
+        rs = ps.getGeneratedKeys();
+        if (rs.next()) {
+            uv.setId(rs.getInt(1)); // تخزين ID داخل الكائن
         }
+
         return count;
+
+    } catch (Exception ex) {
+        throw ex; // حتى لو فشل نعرف وين الخطأ
+    } finally {
+        if (rs != null) rs.close();
+        if (ps != null) ps.close();
+        closeConnection(con);
     }
+}
+
 
     @Override
     public int update(UsersVo uv) throws Exception {
@@ -71,24 +84,25 @@ public UsersVo getData(UsersVo uv) throws Exception {
     try {
         con = getConnection();
 
-        String sql = "SELECT * FROM users WHERE USER_NAME = "+ uv.getUserName() +"AND PASSWORD = "+uv.getPassword();
-        PreparedStatement ps = con.prepareCall(sql);
+        String sql = "SELECT * FROM users WHERE USER_NAME = ? AND PASSWORD = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+
+        ps.setString(1, uv.getUserName());
+        ps.setString(2, uv.getPassword());
+
         rs = ps.executeQuery();
 
-        while (rs.next()){
-        usersVo = new UsersVo();
-        usersVo.setId(rs.getInt("id"));
-        usersVo.setUserName("USER_NAMEA");
-        usersVo.setPassword("PASSWORD");
-        UsersType usersType = UsersType.getUsersTypeByTypeById(rs.getInt("USERS_TYPE"));
-        usersVo.setUsersType(usersType);
+        if (rs.next()) {
+            usersVo = new UsersVo();
+            usersVo.setId(rs.getInt("ID"));
+            usersVo.setUserName(rs.getString("USER_NAME"));
+            usersVo.setPassword(rs.getString("PASSWORD"));
+            UsersType usersType = UsersType.getUsersTypeByTypeById(rs.getInt("USER_TYPE"));
+            usersVo.setUsersType(usersType);
         }
 
-        rs.close();
-        ps.close();
-        
-    } catch(Exception ex) {
-        ex.printStackTrace(); //  باش نعرف لو خطا
+    } catch (Exception ex) {
+        ex.printStackTrace();
     } finally {
         closeConnection(con);
     }
@@ -98,9 +112,9 @@ public UsersVo getData(UsersVo uv) throws Exception {
 
 
 
+    
     @Override
-  
-    public UsersVo getDataById(int id) throws Exception {
+public UsersVo getDataById(int id) throws Exception {
     Connection con = null;
     UsersVo usersVo = null;
     ResultSet rs = null;
@@ -112,26 +126,29 @@ public UsersVo getData(UsersVo uv) throws Exception {
         ps.setInt(1, id);
         rs = ps.executeQuery();
 
-         while (rs.next()){
-        usersVo = new UsersVo();
-        usersVo.setId(rs.getInt("id"));
-        usersVo.setUserName("USER_NAMEA");
-        usersVo.setPassword("PASSWORD");
-        UsersType usersType = UsersType.getUsersTypeByTypeById(rs.getInt("USERS_TYPE"));
-        usersVo.setUsersType(usersType);
+        if (rs.next()) {
+            usersVo = new UsersVo();
+            usersVo.setId(rs.getInt("ID"));
+            usersVo.setUserName(rs.getString("USER_NAME"));
+            usersVo.setPassword(rs.getString("PASSWORD"));
+            UsersType usersType = UsersType.getUsersTypeByTypeById(rs.getInt("USER_TYPE")); // ثابت
+            usersVo.setUsersType(usersType);
         }
 
         rs.close();
         ps.close();
-        
+
     } catch(Exception ex) {
-        ex.printStackTrace(); //  باش نعرف لو خطا
+        ex.printStackTrace();
+        throw ex; //  لمعرفة سبب الخطأ
     } finally {
         closeConnection(con);
     }
 
     return usersVo;
 }
+
+
 
 
     private void closeConnection(Connection con) {
