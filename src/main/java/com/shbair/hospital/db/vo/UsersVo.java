@@ -1,19 +1,12 @@
-// omayma hamad 
-// 252613
 package com.shbair.hospital.db.vo;
-
 import com.shbair.hospital.db.type.UsersType;
 
-/**
- *
- * @author LCS
- */
 public class UsersVo {
     private int id ;
     private String userName;
     private String password;
     private UsersType usersType;
-    public String getPassword;
+   
     
 
     public int getId() {
@@ -47,5 +40,11 @@ public class UsersVo {
     public void setUsersType(UsersType usersType) {
         this.usersType = usersType;
     }
+
+    public void setUsersType(UsersVo type) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
     
 }

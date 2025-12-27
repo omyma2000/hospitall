@@ -4,6 +4,8 @@
  */
 package com.shbair.hospital.validation;
 
+import java.sql.Date;
+
 /**
  *
  * @author LCS
@@ -44,5 +46,21 @@ public class Validation {
      }
    }
      return true;
+   }
+     public static boolean isDate(String datestr){
+   
+     if(datestr == null|| datestr.trim().isEmpty()) 
+     {
+         return false;
+     }
+     
+     try{
+     
+     
+     }catch (Exception ex)
+     {
+         return false;
+     }
+      return true;
    }
 }

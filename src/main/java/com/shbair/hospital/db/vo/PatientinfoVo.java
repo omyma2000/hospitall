@@ -1,16 +1,17 @@
 
 package com.shbair.hospital.db.vo;
 
-public class UserDetailsVo {
-    private int id;
-    private UsersVo usersVo;
+/**
+ *
+ * @author LCS
+ */
+public class PatientinfoVo {
+    private  int id;
     private String firstName;
     private String fatherName;
     private String mobile;
-    private  byte[] image;
-    private String Specialization;
-
-
+    private String email;
+    private UsersVo usersVo;
 
     public int getId() {
         return id;
@@ -18,14 +19,6 @@ public class UserDetailsVo {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public UsersVo getUsersVo() {
-        return usersVo;
-    }
-
-    public void setUsersVo(UsersVo usersVo) {
-        this.usersVo = usersVo;
     }
 
     public String getFirstName() {
@@ -51,25 +44,25 @@ public class UserDetailsVo {
     public void setMobile(String mobile) {
         this.mobile = mobile;
     }
-       
 
-    public byte[] getImage() {
-        return image;
+    public String getEmail() {
+        return email;
     }
 
-    public void setImage(byte[] image) {
-        this.image = image;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public String getSpecialization() {
-        return Specialization;
+    public UsersVo getUsersVo() {
+        return usersVo;
     }
 
-    public void setSpecialization(String Specialization) {
-        this.Specialization = Specialization;
+    public void setUsersVo(UsersVo usersVo) {
+        this.usersVo = usersVo;
     }
-    
 
- 
+    public void close() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

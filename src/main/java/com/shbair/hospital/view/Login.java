@@ -6,6 +6,8 @@ package com.shbair.hospital.view;
 
 import com.shbair.hospital.db.dao.UsersDao;
 import com.shbair.hospital.db.vo.UsersVo;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -22,7 +24,9 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         this.setLocationRelativeTo(null);
+       
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,16 +112,19 @@ public class Login extends javax.swing.JFrame {
         usersVo.setPassword(password);
         try {
             UsersVo uv = UsersDao.getInstance().getData(usersVo);
-            if(uv==null){
+            if(uv == null){
          JOptionPane.showMessageDialog(null,"Enter Valid User Name and Password");
-        } else {
-        Home home = new Home();
-        home.setVisible(true);
-        this.setVisible(false);
-        } 
+       } else {
+    //. إنشاء الشاشة
+    Home home = new Home(uv); 
+    home.setVisible(true);
+    this.setVisible(false);
+
+  
+}
        // TODO add your handling code here:
         } catch (Exception ex) {
-            System.getLogger(Login.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+           Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null ,ex);
         }        // TODO add your handling code here:
     }//GEN-LAST:event_btnLoginActionPerformed
 

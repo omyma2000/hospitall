@@ -1,7 +1,7 @@
 package com.shbair.hospital.db.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import javax.swing.JOptionPane;
+
 // ربط البروجكت مع الداتابيس
 public class Dao {
 
@@ -18,7 +18,7 @@ public class Dao {
 
         return null;
     }
-    public void closeconnection(Connection con) throws Exception{
+    public void closeConnection(Connection con) throws Exception{
     if (con != null){
     con.close();
     }
